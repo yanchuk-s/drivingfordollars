@@ -6,7 +6,7 @@
                 <v-list>
                    <ul>
                        <li>
-                           <router-link  class="drop-link" to="/">Home</router-link
+                           <router-link  class="drop-link" to="/">Home</router-link>
                        </li>
                        <li>
                            <router-link class="drop-link" to="/list">Lists Contact (Email Link)</router-link>

@@ -20,6 +20,9 @@ Vue.use(Vuetify)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest'
+
 Vue.use(VueAxios, axios)
 
 var VueCookie = require('vue-cookie');

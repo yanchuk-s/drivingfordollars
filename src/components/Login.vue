@@ -65,10 +65,13 @@
         methods:{
             login () {
                 if(this.valid == true){
+                    console.log(this.user)
                     this.$cookie.set('test', true, 1);
                     this.$router.push('/')
-                    this.axios.post("https://drivingfordollars.com/clients/login", this.user)
-                    .then(response => {console.log(response)})
+                    // this.axios.post("https://drivingfordollars.com/clients/login", this.user)
+                    // .then(response => {console.log('response')})
+                    this.axios.get("https://drivingfordollars.com/areas")
+                    .then(response => {console.log('response')})
                 }
             }
         }

@@ -39,7 +39,7 @@ router.beforeEach((to, from, next) => {
   if(to.path == '/login'){
     next()
   }else{
-    if(VueCookie.get('test') !== null){
+    if(VueCookie.get('test')){
       next()
     }else{
       router.push('/login')
