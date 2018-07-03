@@ -37,9 +37,13 @@ Vue.use(Router)
 
 router.beforeEach((to, from, next) => {
   if(to.path == '/login'){
-    next()
+    if(VueCookie.get('auth_token')){
+      router.push('/')
+    }else{
+      next()
+    }
   }else{
-    if(VueCookie.get('test')){
+    if(VueCookie.get('auth_token')){
       next()
     }else{
       router.push('/login')

@@ -20,13 +20,19 @@ Vue.use(Vuetify)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
-axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest'
+// axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
+// axios.defaults.headers.post['X-Requested-With'] = 'XMLHttpRequest'
 
+axios.defaults.withCredentials = true
 Vue.use(VueAxios, axios)
 
 var VueCookie = require('vue-cookie');
 Vue.use(VueCookie);
+
+
+import VueToastr from '@deveodk/vue-toastr'
+import '@deveodk/vue-toastr/dist/@deveodk/vue-toastr.css'
+Vue.use(VueToastr)
 
 /* eslint-disable no-new */
 new Vue({

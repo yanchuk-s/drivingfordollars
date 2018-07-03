@@ -11,19 +11,22 @@
                 <v-text-field :rules="emailRules" v-model="user.email_address" label="Email address"></v-text-field>
               </v-flex>
               <v-flex xs12>
-                <v-text-field type="password" v-model="user.password" label="Password"></v-text-field>
+                <v-text-field :rules="passRules" type="password" v-model="user.password" label="Password"></v-text-field>
               </v-flex>
              <v-flex xs12>
-                <!-- <v-btn class="submit-btn" @click.prevent="login">Login</v-btn> -->
-
                 <v-btn
                     @click.prevent="login"
+                    v-bind:disabled="showLoader == true"
                     class="submit-btn"
-                    :loading="loading3"
-                    :disabled="loading3"
-                    @click.native="loader = 'loading3'"
                     >
                     Login
+                </v-btn>
+
+                <v-btn
+                    v-bind:disabled="showLoader == true"
+                    class="submit-btn"
+                    >
+                    login with facebook
                 </v-btn>
 
              </v-flex>
@@ -33,6 +36,8 @@
     </div>
 </template>
 <script>
+    import qs from 'qs'
+
     export default{
         name: 'Login',
         data(){
@@ -41,37 +46,49 @@
                     email_address: '',
                     password: ''
                 },
+                showLoader: false,
                 loader: null,
                 loading3: false,
                 info: null,
                 valid: false,
                 email: '',
+                pass:'',
+                p: false,
                 emailRules: [
                     v => !!v || 'E-mail is required',
                     v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid'
+                ],
+                passRules: [
+                     v => !!v || 'Password is required',
                 ]
-            }
-        },
-        watch: {
-            loader () {
-                const l = this.loader
-                this[l] = !this[l]
-
-                setTimeout(() => (this[l] = false), 3000)
-
-                this.loader = null
             }
         },
         methods:{
             login () {
-                if(this.valid == true){
-                    console.log(this.user)
-                    this.$cookie.set('test', true, 1);
-                    this.$router.push('/')
-                    // this.axios.post("https://drivingfordollars.com/clients/login", this.user)
-                    // .then(response => {console.log('response')})
-                    this.axios.get("https://drivingfordollars.com/areas")
-                    .then(response => {console.log('response')})
+                this.showLoader = true;
+                if(this.valid == true && this.user.email_address != '' && this.user.password != '') {
+                    var _this = this;
+                    this.axios("https://drivingfordollars.com/clients/login",{
+                        method:'POST',
+                        data:qs.stringify(this.user),
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        withCredentials: true
+                    })
+                    .then(function (response) {
+                        _this.showLoader = false;
+                         _this.$cookie.set('auth_token', response.data.auth_token, 1);
+                         _this.$router.push('/')
+                    })
+                    .catch((error) => {
+                         _this.showLoader = false;
+                        this.$toastr('error', 'Enter the correct E-mail and Password', 'Error');
+                    })
+                }else{
+                    this.showLoader = false;
+                    this.$toastr('error', 'E-mail or Password is required', 'Error');
                 }
             }
         }

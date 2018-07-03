@@ -45,7 +45,7 @@
                 this.$router.push(page)
             },
             logout(){
-                this.$cookie.delete('test');
+                this.$cookie.delete('auth_token');
                 this.headerTitle = 'Login'
                 this.$router.push('/login')
             }
@@ -100,16 +100,20 @@
             height: auto!important;
             .list{
                 background-color: #fff;
-                ul li .drop-link{
-                display: block;
-                padding: 10px;
-                color: #000;
-                text-decoration: none;
-                cursor: pointer;
+                ul{
+                    margin: 0;
+                    padding-left: 0;
+                    li .drop-link{
+                    display: block;
+                    padding: 10px;
+                    color: #000;
+                    text-decoration: none;
+                    cursor: pointer;
                     &:hover{
                         background-color: rgba(0,0,0,0.1);
                         text-decoration: none;
                     }
+                }
                 }
             }
         }
