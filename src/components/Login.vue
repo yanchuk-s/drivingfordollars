@@ -159,6 +159,7 @@
     .input-group__input input{
         border-bottom: 1px solid #ccc;
     }
+    
 
     .input-group__details:after{
         background-color: #3b84d6;
