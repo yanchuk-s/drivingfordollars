@@ -137,6 +137,7 @@
         margin-bottom: 30px;
         color: #999;
     }
+    
     .submit-btn{
         background-color: #2196f3;
         color: #fff;
@@ -159,7 +160,7 @@
     .input-group__input input{
         border-bottom: 1px solid #ccc;
     }
-    
+
 
     .input-group__details:after{
         background-color: #3b84d6;
