@@ -4,8 +4,8 @@
             <div class="list-header">
                 <div class="list-header-top">
                     <div class="left-side" @click="showLists">
-                        <!-- <div class="count-list">{{count}}, {{listId}}</div> -->
-                        <div class="list-title">{{title}}, {{listId}}</div>
+                        <!-- <div class="count-list">{{count}}, {{uuid}}</div> -->
+                        <div class="list-title">{{title}}</div>
                     </div>
                     <div class="right-side">
                         <div class="add-user">
@@ -15,7 +15,7 @@
                             <a href=""><i class="fas fa-sort"></i></a>
                         </div>
                         <div class="delete-list">
-                            <button @click="deletelist(listId)"><i class="fas fa-times"></i></button>
+                            <button @click="deletelist(uuid, title)"><i class="fas fa-times"></i></button>
                         </div>
                     </div>
                 </div>
@@ -122,8 +122,8 @@ import GLOBAL from './GLOBAL';
           users:{
               type: Array
           },
-          listId: {
-              type: String
+          uuid: {
+              type: Number
           }
         },
         data(){
@@ -146,29 +146,27 @@ import GLOBAL from './GLOBAL';
         methods: {
             showLists(){
                 this.showList = !this.showList;
-
-                this.axios.get("https://drivingfordollars.com/contacts/marketing_list/"+this.listId)
-                .then(function (response) {
-                    console.log(response.data);
-                    _this.lists = response.data;
-
-                })
-                
+                if(this.addUser == true){
+                    this.addUser = false;
+                }
             },
-            deletelist(index){
+            deletelist(index, title){
                 GLOBAL.deleteList(index)
+                this.$toastr('success', `${title} delete`, 'Success');
             },
             addClient(){
                 if(this.user.name != undefined && this.user.phone != undefined && this.user.address != undefined){
-                    GLOBAL.addUser(this.id,this.user.name,this.user.phone,this.user.address)
+                    GLOBAL.addUser(this.uuid,this.user.name,this.user.phone,this.user.address)
                     this.user.name = undefined;
                     this.user.phone = undefined;
                     this.user.address = undefined;
+                    this.$toastr('success', 'Contact add', 'Success');
                 }
                 
             },
             deleteClient(id){
                 GLOBAL.deleteUser(this.id,id)
+                this.$toastr('success', 'Contact delete', 'Success');
             }
         }
     }

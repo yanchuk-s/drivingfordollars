@@ -1,72 +1,19 @@
 import Vue from 'vue';
 export default new Vue({
     data: {
-        lists:[]
-        // lists:[
-        //     {
-        //        id: 1, 
-        //        title: 'List 1',
-        //        users: [
-        //            {
-        //                name: 'John 1',
-        //                phone: '800-500-12-1212',
-        //                address: '1 Main St, NY'
-        //            },
-        //            {
-        //                 name: 'John 2',
-        //                 phone: '800-500-12-1212',
-        //                 address: '1 Main St, NY'
-        //            },
-        //            {
-        //                 name: 'John 3',
-        //                 phone: '800-500-12-1212',
-        //                 address: '1 Main St, NY'
-        //            }
-        //        ]
-        //     },
-        //     {
-        //         id: 2,
-        //         title: 'List 2',
-        //         users: [
-        //             {
-        //                 name: 'John 4',
-        //                 phone: '800-500-12-1212',
-        //                 address: '1 Main St, NY'
-        //             },
-        //             {
-        //                  name: 'John 5',
-        //                  phone: '800-500-12-1212',
-        //                  address: '1 Main St, NY'
-        //             },
-        //             {
-        //                  name: 'John 6',
-        //                  phone: '800-500-12-1212',
-        //                  address: '1 Main St, NY'
-        //             }
-        //         ]
-        //      },
-        //      {
-        //         id: 3,
-        //         title: 'List 3',
-        //         users: [
-        //             {
-        //                 name: 'John 7',
-        //                 phone: '800-500-12-1212',
-        //                 address: '1 Main St, NY'
-        //             },
-        //             {
-        //                  name: 'John 8',
-        //                  phone: '800-500-12-1212',
-        //                  address: '1 Main St, NY'
-        //             },
-        //             {
-        //                  name: 'John 9',
-        //                  phone: '800-500-12-1212',
-        //                  address: '1 Main St, NY'
-        //             }
-        //         ]
-        //      },
-        // ]
+        lists:[
+            {
+                name: 'List 1',
+                uuid: 1,
+                users: [
+                    {
+                       name: 'John 1',
+                       phone: '800-500-12-1212',
+                       address: '1 Main St, NY' 
+                    }
+                ]
+            }
+        ]
     },
     methods: {
         addList(name){
@@ -78,7 +25,8 @@ export default new Vue({
             }
             this.lists.push({
                 uuid,
-                name
+                name,
+                users: []
             })
         },
         deleteList(index){
@@ -91,12 +39,19 @@ export default new Vue({
                 }
             });
         },
-        addUser(listId,name,phone,address){
-            this.lists[listId].users.push({
-                name,
-                phone,
-                address
-            })
+        addUser(uuid,name,phone,address){
+            var _this = this;
+            this.lists.forEach(function(item, i, arr) {
+                for(var key in item){
+                   if(item[key] == uuid){
+                       _this.lists[i].users.push({
+                        name,
+                        phone,
+                        address
+                    })
+                   }  
+                }
+            });
         },
         deleteUser(listId,userId){
             this.lists[listId].users.splice(userId, 1)

@@ -27,7 +27,7 @@
                     :title="list.name"
                     :count="i+1"
                     :id="i"
-                    :listId="list.uuid"
+                    :uuid="list.uuid"
                     :users="list.users"
                 >
                 </ListItem>
@@ -63,8 +63,9 @@ import qs from 'qs'
             addList(){
                 if(this.lists.title != undefined){
                     GLOBAL.addList(this.lists.title)
+                    this.$toastr('success', `${this.lists.title}  add`, 'Success');
                     this.lists.title = undefined;
-                     
+                    
                     // this.axios("https://drivingfordollars.com/clients/marketing_lists/add",{
                     //     method:'POST',
                     //     data:this.lists.title,
@@ -90,31 +91,19 @@ import qs from 'qs'
             }
         },
         mounted: function () {
-             // this.lists = GLOBAL.lists;
-            // console.log(this.lists)
-            var auth_token = this.$cookie.get('auth_token');
-            this.axios("https://drivingfordollars.com/marketing_lists",{
-                        method:'GET',
-                        headers: {
-                            'Authorization': 'Bearer ' + auth_token
-                        }
-                    })
-                    .then(function (response) {
-                       
-                    })
-                    .catch((error) => {
-                        
-                    })
-
-
-
-            // var _this = this;
-            // this.axios.get("https://drivingfordollars.com/marketing_lists")
-            // .then(function (response) {
-            //     GLOBAL.lists = response.data;
-            //     _this.lists =  GLOBAL.lists
-
-            // })
+            this.lists = GLOBAL.lists
+            var _this = this;
+            // var auth_token = this.$cookie.get('auth_token');
+            // this.axios("https://drivingfordollars.com/marketing_lists",{
+            //             method:'GET',
+            //             headers: {
+            //                 'Authorization': 'Bearer ' + auth_token
+            //             }
+            //         })
+            //         .then(function (response) {
+            //             GLOBAL.lists = response.data;
+            //             _this.lists =  GLOBAL.lists
+            //         })
         }
     }
 </script>

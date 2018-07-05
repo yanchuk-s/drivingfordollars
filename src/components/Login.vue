@@ -21,14 +21,13 @@
                     >
                     Login
                 </v-btn>
-
-                <v-btn
-                    v-bind:disabled="showLoader == true"
-                    class="submit-btn"
-                    >
-                    login with facebook
-                </v-btn>
-
+                <!-- <fb-signin-button
+                class="submit-btn facebook-login"
+                    :params="fbSignInParams"
+                    @success="onSignInSuccess"
+                    @error="onSignInError">
+                    Sign in with Facebook
+                </fb-signin-button> -->
              </v-flex>
             </v-layout>
           </v-container>
@@ -42,10 +41,15 @@
         name: 'Login',
         data(){
             return{
+                 fbSignInParams: {
+                    scope: 'email,user_likes',
+                    return_scopes: true
+                },
                 user: {
                     email_address: '',
                     password: ''
                 },
+                access_token: '',
                 showLoader: false,
                 loader: null,
                 loading3: false,
@@ -64,6 +68,35 @@
             }
         },
         methods:{
+            onSignInSuccess (response) {
+                var _this = this;
+                FB.api('/me', dude => {
+                    console.log(response.authResponse.accessToken)
+                    this.access_token = response.authResponse.accessToken;
+                    this.axios("https://drivingfordollars.com/clients/login/facebook",{
+                        method:'POST',
+                        data:qs.stringify(this.access_token),
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        withCredentials: true
+                    })
+                    .then(function (response) {
+                        //  _this.$cookie.set('auth_token', response.data.auth_token, 1);
+                        //  _this.$router.push('/')
+                    })
+                    .catch((error) => {
+                        _this.$cookie.set('auth_token', _this.access_token, 1);
+                         _this.$router.push('/')
+                        // this.$toastr('error', 'Enter the correct E-mail and Password', 'Error');
+                    })
+
+                })
+            },
+            onSignInError (error) {
+                console.log('OH NOES', error)
+            },
             login () {
                 this.showLoader = true;
                 if(this.valid == true && this.user.email_address != '' && this.user.password != '') {
@@ -111,6 +144,16 @@
         z-index: 0;
         width: 100%;
         margin: 10px 0;
+    }
+
+    .facebook-login{
+        text-align: center;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 6px 0;
+        border-radius: 4px;
+        -webkit-box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+        box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
     }
 
     .input-group__input input{
